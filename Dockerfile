@@ -1,0 +1,1 @@
+FROM node:22-alpine AS build\n\nWORKDIR /app\n\nCOPY package*.json ./\nCOPY vite.config.js ./\nCOPY eslint.config.js ./\nCOPY . .\n\nRUN npm ci\nRUN npm run build\n\nFROM nginx:alpine\nCOPY --from=build /app/dist /usr/share/nginx/html\n\nEXPOSE 80\nCMD ["nginx", "-g", "daemon off;"]
